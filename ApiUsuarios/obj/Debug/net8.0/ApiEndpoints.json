@@ -43,6 +43,22 @@
   },
   {
     "ContainingType": "ApiUsuarios.Controllers.UsuarioController",
+    "Method": "RemoverUsuario",
+    "RelativePath": "api/Usuario",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiUsuarios.Controllers.UsuarioController",
     "Method": "BuscarUsuarioPorId",
     "RelativePath": "api/Usuario/{id}",
     "HttpMethod": "GET",
