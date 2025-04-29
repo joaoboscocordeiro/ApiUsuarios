@@ -8,6 +8,7 @@ API Completa de Cadastro de Usuário com Autenticação
 #### - C# Language
 #### - SQL Server
 #### - Entity Framework
+#### - Authorization
 
 ----------------------------------------------------------------------------------------------------
 
