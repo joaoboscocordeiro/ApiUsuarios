@@ -1,4 +1,5 @@
-﻿using ApiUsuarios.Dtos.Usuario;
+﻿using ApiUsuarios.Dtos.Login;
+using ApiUsuarios.Dtos.Usuario;
 using ApiUsuarios.Models;
 
 namespace ApiUsuarios.Services.Usuario
@@ -10,5 +11,6 @@ namespace ApiUsuarios.Services.Usuario
         Task<ResponseModel<UsuarioModel>> BuscarUsuarioPorId(int id);
         Task<ResponseModel<UsuarioModel>> EditarUsuario(UsuarioEdicaoDto usuarioEdicaoDto);
         Task<ResponseModel<UsuarioModel>> RemoverUsuario(int id);
+        Task<ResponseModel<UsuarioModel>> Login(UsuarioLoginDto usuarioLoginDto);
     }
 }
