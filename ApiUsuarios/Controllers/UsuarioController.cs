@@ -1,5 +1,6 @@
 ﻿using ApiUsuarios.Dtos.Usuario;
 using ApiUsuarios.Services.Usuario;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace ApiUsuarios.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioInterface _usuarioInterface;
