@@ -1,0 +1,38 @@
+# Build outputs
+[Bb]in/
+[Oo]bj/
+
+# Local run logs
+.run/
+
+# IDE/user-specific files
+.vs/
+*.user
+*.suo
+*.rsuser
+*.sln.docstates
+
+# Logs and temporary files
+*.log
+*.tmp
+*.cache
+
+# NuGet/package artifacts
+*.nupkg
+*.snupkg
+packages/
+
+# Publish artifacts
+publish/
+*.publish.xml
+*.pubxml
+
+# Local databases
+*.mdf
+*.ldf
+*.ndf
+
+# Node/frontend artifacts
+node_modules/
+dist/
+build/
