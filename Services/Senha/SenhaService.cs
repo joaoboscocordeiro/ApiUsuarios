@@ -38,6 +38,8 @@ namespace ApiUsuarios.Services.Senha
         {
             List<Claim> claims = new List<Claim>()
             {
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
                 new Claim("Email", usuario.Email),
                 new Claim("Username", usuario.Usuario)
             };

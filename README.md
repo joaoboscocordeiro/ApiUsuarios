@@ -6,9 +6,13 @@ API ASP.NET Core para cadastro, login e consulta de usuarios. A aplicacao esta o
 
 - `POST /api/auth/register`: cadastra usuario.
 - `POST /api/auth/login`: autentica usuario e retorna JWT.
-- `GET /api/users`: lista usuarios autenticados.
-- `GET /api/users/{id}`: busca usuario autenticado por id.
-- `DELETE /api/users/{id}`: remove usuario autenticado por id.
+- `GET /api/users/me`: busca o usuario autenticado.
+- `PUT /api/users/me`: edita o usuario autenticado.
+- `DELETE /api/users/me`: remove o usuario autenticado.
+- `GET /api/users`: lista usuarios, restrito a perfil `Admin`.
+- `GET /api/users/{id}`: busca usuario por id apenas quando for o proprio usuario autenticado.
+- `PUT /api/users`: edita usuario apenas quando o id enviado for o proprio usuario autenticado.
+- `DELETE /api/users/{id}`: remove usuario por id apenas quando for o proprio usuario autenticado.
 - `GET /health`: health check basico.
 
 ## Executar localmente
@@ -36,14 +40,3 @@ A API fica disponivel em:
 ```text
 http://localhost:8080
 ```
-
-Configure segredos por variavel de ambiente quando usar fora do ambiente local:
-
-```powershell
-$env:JWT_TOKEN = "troque_por_um_token_longo_e_secreto"
-$env:SA_PASSWORD = "troque_por_uma_senha_forte"
-```
-
-## Observacoes de banco
-
-A migration `RemoveStoredTokenAndAddUserIndexes` remove a coluna `Token` da tabela `Usuarios` e adiciona indices unicos para `Email` e `Usuario`. Antes de aplicar em um banco com dados reais, verifique se nao existem emails ou usuarios duplicados.

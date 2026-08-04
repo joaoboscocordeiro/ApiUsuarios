@@ -36,7 +36,32 @@ Accept: application/json
 
 ###
 
+GET {{ApiUsuarios_HostAddress}}/api/users/me
+Authorization: Bearer {{JwtToken}}
+Accept: application/json
+
+###
+
+PUT {{ApiUsuarios_HostAddress}}/api/users/me
+Authorization: Bearer {{JwtToken}}
+Content-Type: application/json
+
+{
+  "usuario": "junior",
+  "nome": "Junior",
+  "sobrenome": "Silva",
+  "email": "junior@example.com"
+}
+
+###
+
 GET {{ApiUsuarios_HostAddress}}/api/users/1
+Authorization: Bearer {{JwtToken}}
+Accept: application/json
+
+###
+
+DELETE {{ApiUsuarios_HostAddress}}/api/users/me
 Authorization: Bearer {{JwtToken}}
 Accept: application/json
 
