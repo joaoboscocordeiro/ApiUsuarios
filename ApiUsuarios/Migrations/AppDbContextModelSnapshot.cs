@@ -17,7 +17,7 @@ namespace ApiUsuarios.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "8.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,7 +38,7 @@ namespace ApiUsuarios.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -56,15 +56,17 @@ namespace ApiUsuarios.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Usuario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Usuario")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });

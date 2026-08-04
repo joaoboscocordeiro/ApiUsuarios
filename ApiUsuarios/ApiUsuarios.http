@@ -1,6 +1,47 @@
 @ApiUsuarios_HostAddress = http://localhost:5196
+@JwtToken = cole_o_token_aqui
 
-GET {{ApiUsuarios_HostAddress}}/weatherforecast/
+GET {{ApiUsuarios_HostAddress}}/health
 Accept: application/json
 
 ###
+
+POST {{ApiUsuarios_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "usuario": "junior",
+  "nome": "Junior",
+  "sobrenome": "Silva",
+  "email": "junior@example.com",
+  "senha": "Senha@123",
+  "confirmaSenha": "Senha@123"
+}
+
+###
+
+POST {{ApiUsuarios_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "junior@example.com",
+  "senha": "Senha@123"
+}
+
+###
+
+GET {{ApiUsuarios_HostAddress}}/api/users
+Authorization: Bearer {{JwtToken}}
+Accept: application/json
+
+###
+
+GET {{ApiUsuarios_HostAddress}}/api/users/1
+Authorization: Bearer {{JwtToken}}
+Accept: application/json
+
+###
+
+DELETE {{ApiUsuarios_HostAddress}}/api/users/1
+Authorization: Bearer {{JwtToken}}
+Accept: application/json

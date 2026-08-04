@@ -4,49 +4,57 @@ using ApiUsuarios.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var jwtToken = builder.Configuration["AppSettings:Token"]
+    ?? throw new InvalidOperationException("Configure AppSettings:Token para emissao e validacao de JWT.");
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
+
 builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 builder.Services.AddScoped<ISenhaInterface, SenhaService>();
 
-builder.Services.AddSwaggerGen(options => 
+builder.Services.AddSwaggerGen(options =>
 {
-    options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Standar Authorization header using the Bearer scheme (\"bearer {token}\")",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Informe o token JWT no formato: Bearer {token}",
         Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
     });
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-        ValidateAudience = false,
-        ValidateIssuer = false
-    };
-});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtToken)),
+            ValidateAudience = false,
+            ValidateIssuer = false
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -59,5 +67,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

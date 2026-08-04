@@ -1,12 +1,12 @@
-﻿using ApiUsuarios.Dtos.Login;
+using ApiUsuarios.Dtos.Login;
 using ApiUsuarios.Dtos.Usuario;
+using ApiUsuarios.Models;
 using ApiUsuarios.Services.Usuario;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiUsuarios.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -21,14 +21,19 @@ namespace ApiUsuarios.Controllers
         public async Task<IActionResult> RegistrarUsuario(UsuarioCriacaoDto usuarioCriacaoDto)
         {
             var usuario = await _usuarioInterface.RegistrarUsuario(usuarioCriacaoDto);
-            return Ok(usuario);
+            return Responder(usuario);
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(UsuarioLoginDto usuarioLoginDto)
         {
             var usuario = await _usuarioInterface.Login(usuarioLoginDto);
-            return Ok(usuario);
+            return Responder(usuario);
+        }
+
+        private IActionResult Responder<T>(ResponseModel<T> response)
+        {
+            return StatusCode(response.StatusCode, response);
         }
     }
 }

@@ -6,11 +6,11 @@ namespace ApiUsuarios.Services.Usuario
 {
     public interface IUsuarioInterface
     {
-        Task<ResponseModel<UsuarioModel>> RegistrarUsuario(UsuarioCriacaoDto criacaoCriacaoDto);
-        Task<ResponseModel<List<UsuarioModel>>> ListarUsuarios();
-        Task<ResponseModel<UsuarioModel>> BuscarUsuarioPorId(int id);
-        Task<ResponseModel<UsuarioModel>> EditarUsuario(UsuarioEdicaoDto usuarioEdicaoDto);
-        Task<ResponseModel<UsuarioModel>> RemoverUsuario(int id);
-        Task<ResponseModel<UsuarioModel>> Login(UsuarioLoginDto usuarioLoginDto);
+        Task<ResponseModel<UsuarioRespostaDto>> RegistrarUsuario(UsuarioCriacaoDto criacaoCriacaoDto);
+        Task<ResponseModel<List<UsuarioRespostaDto>>> ListarUsuarios();
+        Task<ResponseModel<UsuarioRespostaDto>> BuscarUsuarioPorId(int id);
+        Task<ResponseModel<UsuarioRespostaDto>> EditarUsuario(UsuarioEdicaoDto usuarioEdicaoDto);
+        Task<ResponseModel<UsuarioRespostaDto>> RemoverUsuario(int id);
+        Task<ResponseModel<LoginRespostaDto>> Login(UsuarioLoginDto usuarioLoginDto);
     }
 }

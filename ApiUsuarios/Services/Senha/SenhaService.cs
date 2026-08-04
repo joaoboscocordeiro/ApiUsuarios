@@ -42,7 +42,10 @@ namespace ApiUsuarios.Services.Senha
                 new Claim("Username", usuario.Usuario)
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
+            var tokenSecret = _config["AppSettings:Token"]
+                ?? throw new InvalidOperationException("Configure AppSettings:Token para emissao de JWT.");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSecret));
 
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

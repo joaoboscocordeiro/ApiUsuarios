@@ -10,5 +10,16 @@ namespace ApiUsuarios.Data
         }
 
         public DbSet<UsuarioModel> Usuarios { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UsuarioModel>()
+                .HasIndex(usuario => usuario.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<UsuarioModel>()
+                .HasIndex(usuario => usuario.Usuario)
+                .IsUnique();
+        }
     }
 }

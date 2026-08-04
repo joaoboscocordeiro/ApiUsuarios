@@ -1,0 +1,24 @@
+services:
+  auth-api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=ApiUsuarios;User Id=sa;Password=${SA_PASSWORD:-Your_password123};TrustServerCertificate=True"
+      AppSettings__Token: "${JWT_TOKEN:-kmowjfngvwpjnvdjrnfpqjnrpjqnepfqerpnptiughwperughpqrugnfpqiuerngpqi}"
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD:-Your_password123}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:

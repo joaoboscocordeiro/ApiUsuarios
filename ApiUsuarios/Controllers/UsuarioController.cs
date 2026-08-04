@@ -1,12 +1,12 @@
-﻿using ApiUsuarios.Dtos.Usuario;
+using ApiUsuarios.Dtos.Usuario;
+using ApiUsuarios.Models;
 using ApiUsuarios.Services.Usuario;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiUsuarios.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     [Authorize]
     public class UsuarioController : ControllerBase
@@ -22,28 +22,33 @@ namespace ApiUsuarios.Controllers
         public async Task<IActionResult> ListarUsuarios()
         {
             var usuarios = await _usuarioInterface.ListarUsuarios();
-            return Ok(usuarios);
+            return Responder(usuarios);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> BuscarUsuarioPorId(int id)
         {
             var usuario = await _usuarioInterface.BuscarUsuarioPorId(id);
-            return Ok(usuario);
+            return Responder(usuario);
         }
 
         [HttpPut]
         public async Task<IActionResult> EditarUsuario(UsuarioEdicaoDto usuarioEdicaoDto)
         {
             var usuario = await _usuarioInterface.EditarUsuario(usuarioEdicaoDto);
-            return Ok(usuario);
+            return Responder(usuario);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoverUsuario(int id)
         {
             var usuario = await _usuarioInterface.RemoverUsuario(id);
-            return Ok(usuario);
+            return Responder(usuario);
+        }
+
+        private IActionResult Responder<T>(ResponseModel<T> response)
+        {
+            return StatusCode(response.StatusCode, response);
         }
     }
 }
