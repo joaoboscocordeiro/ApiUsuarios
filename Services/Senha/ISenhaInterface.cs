@@ -6,6 +6,10 @@ namespace ApiUsuarios.Services.Senha
     {
         void CriarSenhaHash(string senha, out byte[] senhaHash, out byte[] senhaSalt);
         bool VerificaSenhaHash(string senha, byte[] senhaHash, byte[] senhaSalt);
-        string CriarToken(UsuarioModel usuario);
+        string CriarToken(UsuarioModel usuario, DateTime expiracao);
+        DateTime ObterDataExpiracaoTokenAcesso();
+        string CriarRefreshToken();
+        string CriarHashToken(string token);
+        DateTime ObterDataExpiracaoRefreshToken();
     }
 }

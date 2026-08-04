@@ -6,5 +6,8 @@ namespace ApiUsuarios.Dtos.Login
     {
         public UsuarioRespostaDto Usuario { get; set; } = new();
         public string Token { get; set; } = string.Empty;
+        public DateTime TokenExpiracao { get; set; }
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime RefreshTokenExpiracao { get; set; }
     }
 }

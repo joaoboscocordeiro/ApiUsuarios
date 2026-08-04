@@ -20,7 +20,7 @@ namespace ApiUsuarios.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UsuarioRoles.Admin)]
         public async Task<IActionResult> ListarUsuarios()
         {
             var usuarios = await _usuarioInterface.ListarUsuarios();

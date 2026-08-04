@@ -16,7 +16,11 @@ namespace ApiUsuarios.Data
             modelBuilder.Entity<UsuarioModel>()
                 .Property(usuario => usuario.Role)
                 .HasMaxLength(50)
-                .HasDefaultValue("User");
+                .HasDefaultValue(UsuarioRoles.User);
+
+            modelBuilder.Entity<UsuarioModel>()
+                .Property(usuario => usuario.RefreshTokenHash)
+                .HasMaxLength(200);
 
             modelBuilder.Entity<UsuarioModel>()
                 .HasIndex(usuario => usuario.Email)

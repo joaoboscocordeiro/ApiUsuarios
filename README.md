@@ -5,7 +5,9 @@ API ASP.NET Core para cadastro, login e consulta de usuarios. A aplicacao esta o
 ## Rotas principais
 
 - `POST /api/auth/register`: cadastra usuario.
-- `POST /api/auth/login`: autentica usuario e retorna JWT.
+- `POST /api/auth/login`: autentica usuario e retorna JWT com refresh token.
+- `POST /api/auth/refresh-token`: renova JWT e rotaciona o refresh token.
+- `POST /api/auth/logout`: revoga o refresh token ativo do usuario autenticado.
 - `GET /api/users/me`: busca o usuario autenticado.
 - `PUT /api/users/me`: edita o usuario autenticado.
 - `DELETE /api/users/me`: remove o usuario autenticado.
@@ -25,6 +27,19 @@ Para definir o primeiro administrador em ambiente local, atualize o usuario dire
 UPDATE Usuarios
 SET Role = 'Admin'
 WHERE Email = 'junior@example.com';
+```
+
+## Tokens
+
+O JWT de acesso expira em 30 minutos por padrao. O refresh token expira em 7 dias, e a API salva apenas o hash dele no banco.
+
+Esses tempos podem ser ajustados em `AppSettings`:
+
+```json
+{
+  "AccessTokenExpirationMinutes": 30,
+  "RefreshTokenExpirationDays": 7
+}
 ```
 
 ## Executar localmente

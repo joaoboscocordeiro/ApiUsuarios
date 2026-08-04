@@ -12,5 +12,7 @@ namespace ApiUsuarios.Services.Usuario
         Task<ResponseModel<UsuarioRespostaDto>> EditarUsuario(UsuarioEdicaoDto usuarioEdicaoDto);
         Task<ResponseModel<UsuarioRespostaDto>> RemoverUsuario(int id);
         Task<ResponseModel<LoginRespostaDto>> Login(UsuarioLoginDto usuarioLoginDto);
+        Task<ResponseModel<LoginRespostaDto>> RefreshToken(RefreshTokenDto refreshTokenDto);
+        Task<ResponseModel<string>> Logout(int usuarioId);
     }
 }

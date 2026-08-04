@@ -144,11 +144,7 @@ namespace ApiUsuarios.Services.Usuario
                     return response;
                 }
 
-                response.Dados = new LoginRespostaDto
-                {
-                    Usuario = MapearUsuarioResposta(usuario),
-                    Token = _senhaInterface.CriarToken(usuario)
-                };
+                response.Dados = await CriarLoginResposta(usuario);
                 response.Mensagem = "Usuario logado com sucesso!";
 
                 return response;
@@ -184,7 +180,7 @@ namespace ApiUsuarios.Services.Usuario
                     Email = usuarioCriacaoDto.Email,
                     Nome = usuarioCriacaoDto.Nome,
                     Sobrenome = usuarioCriacaoDto.Sobrenome,
-                    Role = "User",
+                    Role = UsuarioRoles.User,
                     SenhaHash = senhaHash,
                     SenhaSalt = senhaSalt
                 };
@@ -195,6 +191,76 @@ namespace ApiUsuarios.Services.Usuario
                 response.Mensagem = "Usuario cadastrado com sucesso!";
                 response.Dados = MapearUsuarioResposta(usuario);
                 response.StatusCode = StatusCodes.Status201Created;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                response.StatusCode = StatusCodes.Status500InternalServerError;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<LoginRespostaDto>> RefreshToken(RefreshTokenDto refreshTokenDto)
+        {
+            ResponseModel<LoginRespostaDto> response = new();
+
+            try
+            {
+                var refreshTokenHash = _senhaInterface.CriarHashToken(refreshTokenDto.RefreshToken);
+
+                var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
+                    u.RefreshTokenHash == refreshTokenHash);
+
+                if (usuario == null ||
+                    usuario.RefreshTokenRevogadoEm != null ||
+                    usuario.RefreshTokenExpiracao == null ||
+                    usuario.RefreshTokenExpiracao <= DateTime.UtcNow)
+                {
+                    response.Mensagem = "Refresh token invalido ou expirado!";
+                    response.Status = false;
+                    response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return response;
+                }
+
+                response.Dados = await CriarLoginResposta(usuario);
+                response.Mensagem = "Token renovado com sucesso!";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                response.StatusCode = StatusCodes.Status500InternalServerError;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<string>> Logout(int usuarioId)
+        {
+            ResponseModel<string> response = new();
+
+            try
+            {
+                var usuario = await _context.Usuarios.FindAsync(usuarioId);
+
+                if (usuario == null)
+                {
+                    response.Mensagem = "Usuario nao localizado!";
+                    response.Status = false;
+                    response.StatusCode = StatusCodes.Status404NotFound;
+                    return response;
+                }
+
+                usuario.RefreshTokenHash = null;
+                usuario.RefreshTokenRevogadoEm = DateTime.UtcNow;
+
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
+
+                response.Dados = "Logout realizado com sucesso!";
+                response.Mensagem = "Logout realizado com sucesso!";
                 return response;
             }
             catch (Exception ex)
@@ -242,6 +308,30 @@ namespace ApiUsuarios.Services.Usuario
         {
             return await _context.Usuarios.AnyAsync(item =>
                 item.Email == usuarioCriacaoDto.Email || item.Usuario == usuarioCriacaoDto.Usuario);
+        }
+
+        private async Task<LoginRespostaDto> CriarLoginResposta(UsuarioModel usuario)
+        {
+            var tokenExpiracao = _senhaInterface.ObterDataExpiracaoTokenAcesso();
+            var refreshToken = _senhaInterface.CriarRefreshToken();
+            var refreshTokenExpiracao = _senhaInterface.ObterDataExpiracaoRefreshToken();
+
+            usuario.RefreshTokenHash = _senhaInterface.CriarHashToken(refreshToken);
+            usuario.RefreshTokenCriadoEm = DateTime.UtcNow;
+            usuario.RefreshTokenExpiracao = refreshTokenExpiracao;
+            usuario.RefreshTokenRevogadoEm = null;
+
+            _context.Update(usuario);
+            await _context.SaveChangesAsync();
+
+            return new LoginRespostaDto
+            {
+                Usuario = MapearUsuarioResposta(usuario),
+                Token = _senhaInterface.CriarToken(usuario, tokenExpiracao),
+                TokenExpiracao = tokenExpiracao,
+                RefreshToken = refreshToken,
+                RefreshTokenExpiracao = refreshTokenExpiracao
+            };
         }
 
         private static UsuarioRespostaDto MapearUsuarioResposta(UsuarioModel usuario)

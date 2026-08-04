@@ -9,6 +9,8 @@ namespace ApiUsuarios.Services.Senha
 {
     public class SenhaService : ISenhaInterface
     {
+        private const int TempoPadraoTokenAcessoMinutos = 30;
+        private const int TempoPadraoRefreshTokenDias = 7;
         private readonly IConfiguration _config;
 
         public SenhaService(IConfiguration config)
@@ -34,7 +36,7 @@ namespace ApiUsuarios.Services.Senha
             }
         }
 
-        public string CriarToken(UsuarioModel usuario)
+        public string CriarToken(UsuarioModel usuario, DateTime expiracao)
         {
             List<Claim> claims = new List<Claim>()
             {
@@ -54,12 +56,42 @@ namespace ApiUsuarios.Services.Senha
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: expiracao,
                 signingCredentials: cred
                 );
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+
+        public DateTime ObterDataExpiracaoTokenAcesso()
+        {
+            return DateTime.UtcNow.AddMinutes(ObterInteiroConfiguracao(
+                "AppSettings:AccessTokenExpirationMinutes",
+                TempoPadraoTokenAcessoMinutos));
+        }
+
+        public string CriarRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        }
+
+        public string CriarHashToken(string token)
+        {
+            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(token));
+            return Convert.ToBase64String(hash);
+        }
+
+        public DateTime ObterDataExpiracaoRefreshToken()
+        {
+            return DateTime.UtcNow.AddDays(ObterInteiroConfiguracao(
+                "AppSettings:RefreshTokenExpirationDays",
+                TempoPadraoRefreshTokenDias));
+        }
+
+        private int ObterInteiroConfiguracao(string chave, int valorPadrao)
+        {
+            return int.TryParse(_config[chave], out var valor) && valor > 0 ? valor : valorPadrao;
         }
     }
 }

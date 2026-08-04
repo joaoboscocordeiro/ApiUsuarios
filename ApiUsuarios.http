@@ -1,5 +1,6 @@
 @ApiUsuarios_HostAddress = http://localhost:5196
 @JwtToken = cole_o_token_aqui
+@RefreshToken = cole_o_refresh_token_aqui
 
 GET {{ApiUsuarios_HostAddress}}/health
 Accept: application/json
@@ -27,6 +28,21 @@ Content-Type: application/json
   "email": "junior@example.com",
   "senha": "Senha@123"
 }
+
+###
+
+POST {{ApiUsuarios_HostAddress}}/api/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "{{RefreshToken}}"
+}
+
+###
+
+POST {{ApiUsuarios_HostAddress}}/api/auth/logout
+Authorization: Bearer {{JwtToken}}
+Accept: application/json
 
 ###
 

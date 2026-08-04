@@ -7,7 +7,11 @@
         public string Nome { get; set; } = string.Empty;
         public string Sobrenome { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Role { get; set; } = "User";
+        public string Role { get; set; } = UsuarioRoles.User;
+        public string? RefreshTokenHash { get; set; }
+        public DateTime? RefreshTokenExpiracao { get; set; }
+        public DateTime? RefreshTokenCriadoEm { get; set; }
+        public DateTime? RefreshTokenRevogadoEm { get; set; }
         public DateTime DataCriacao { get; set; } = DateTime.Now;
         public DateTime DataAlteracao { get; set; } = DateTime.Now;
         public byte[] SenhaHash { get; set; } = new byte[0];
