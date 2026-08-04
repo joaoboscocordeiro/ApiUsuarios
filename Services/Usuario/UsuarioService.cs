@@ -101,6 +101,7 @@ namespace ApiUsuarios.Services.Usuario
                         Nome = usuario.Nome,
                         Sobrenome = usuario.Sobrenome,
                         Email = usuario.Email,
+                        Role = usuario.Role,
                         DataCriacao = usuario.DataCriacao,
                         DataAlteracao = usuario.DataAlteracao
                     })
@@ -183,6 +184,7 @@ namespace ApiUsuarios.Services.Usuario
                     Email = usuarioCriacaoDto.Email,
                     Nome = usuarioCriacaoDto.Nome,
                     Sobrenome = usuarioCriacaoDto.Sobrenome,
+                    Role = "User",
                     SenhaHash = senhaHash,
                     SenhaSalt = senhaSalt
                 };
@@ -251,6 +253,7 @@ namespace ApiUsuarios.Services.Usuario
                 Nome = usuario.Nome,
                 Sobrenome = usuario.Sobrenome,
                 Email = usuario.Email,
+                Role = usuario.Role,
                 DataCriacao = usuario.DataCriacao,
                 DataAlteracao = usuario.DataAlteracao
             };

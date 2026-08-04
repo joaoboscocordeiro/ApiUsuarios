@@ -14,6 +14,11 @@ namespace ApiUsuarios.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsuarioModel>()
+                .Property(usuario => usuario.Role)
+                .HasMaxLength(50)
+                .HasDefaultValue("User");
+
+            modelBuilder.Entity<UsuarioModel>()
                 .HasIndex(usuario => usuario.Email)
                 .IsUnique();
 

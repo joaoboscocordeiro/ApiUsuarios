@@ -30,6 +30,7 @@ Content-Type: application/json
 
 ###
 
+# Requer token de usuario com role Admin.
 GET {{ApiUsuarios_HostAddress}}/api/users
 Authorization: Bearer {{JwtToken}}
 Accept: application/json
