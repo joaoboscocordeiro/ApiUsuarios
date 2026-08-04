@@ -7,6 +7,7 @@ services:
       ASPNETCORE_URLS: "http://+:8080"
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=ApiUsuarios;User Id=sa;Password=${SA_PASSWORD:-Your_password123};TrustServerCertificate=True"
       AppSettings__Token: "${JWT_TOKEN:-kmowjfngvwpjnvdjrnfpqjnrpjqnepfqerpnptiughwperughpqrugnfpqiuerngpqi}"
+      Cors__AllowedOrigins__0: "http://localhost:5173"
     depends_on:
       - sqlserver
 

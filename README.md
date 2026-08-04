@@ -56,6 +56,22 @@ Swagger em ambiente de desenvolvimento:
 http://localhost:5196/swagger
 ```
 
+## Executar frontend
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+O frontend fica disponivel em:
+
+```text
+http://localhost:5173
+```
+
+Configure `VITE_API_BASE_URL` quando precisar apontar para outra API ou futuro BFF. Exemplo em `frontend/.env.example`.
+
 ## Executar com Docker Compose
 
 ```powershell
